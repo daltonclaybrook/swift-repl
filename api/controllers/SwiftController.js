@@ -30,6 +30,10 @@ var self = module.exports = {
 	    return self.sendMessage('request must be a code block', res);
 	  }
 
+		if (expression == 'restart') {
+			return self.start(req, res);
+		}
+
 		if (!swiftProcess) {
 			console.log('creating swift process!');
 			swiftProcess = spawn('swift');
