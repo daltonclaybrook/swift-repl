@@ -25,7 +25,7 @@ var self = module.exports = {
 		var command = fullMessage.slice(0, 6);
 		var expression = fullMessage.slice(6, fullMessage.length) + '\n';
 
-	  if (command != '/code\n') {
+	  if (command != '/code ') {
 	    sails.log.verbose('invalid command');
 	    return self.sendMessage('request must be a code block', res);
 	  }
