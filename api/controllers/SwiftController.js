@@ -15,6 +15,8 @@ var self = module.exports = {
 		var fullMessage = req.body.item.message.message;
 	  var user = req.body.item.message.from.mention_name;
 
+		console.log('message: ' + fullMessage);
+
 		if (fullMessage.length < 7) {
 			return self.sendMessage('request must be a code block', res);
 		}
