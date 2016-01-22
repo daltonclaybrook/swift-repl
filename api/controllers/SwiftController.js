@@ -30,7 +30,7 @@ var self = module.exports = {
 	    return self.sendMessage('request must be a code block', res);
 	  }
 
-		if (expression == 'restart') {
+		if (fullMessage == '/code restart') {
 			return self.start(req, res);
 		}
 
