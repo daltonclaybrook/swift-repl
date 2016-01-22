@@ -12,11 +12,20 @@ var self = module.exports = {
 
 	repl: function(req, res) {
 
-		var expression = req.body.expression;
-		if (!expression) {
-			return res.badRequest();
+		var fullMessage = req.body.item.message.message;
+	  var user = req.body.item.message.from.mention_name;
+
+		if (fullMessage.length < 7) {
+			return self.sendMessage('request must be a code block', res);
 		}
-		expression += '\n';
+
+		var command = fullMessage.slice(0, 6);
+		var expression = fullMessage.slice(6, fullMessage.length) + '\n';
+
+	  if (command != '/code\n') {
+	    sails.log.verbose('invalid command');
+	    return self.sendMessage('request must be a code block', res);
+	  }
 
 		if (!swiftProcess) {
 			console.log('creating swift process!');
@@ -42,9 +51,7 @@ var self = module.exports = {
 			currentTimeout = setTimeout(() => {
 				if (!sentRes) {
 					sentRes = true;
-					return res.ok({
-						out: dataToSend
-					});
+					return self.sendMessage(dataToSend, res);
 				}
 			}, 500)
 		});
@@ -60,9 +67,7 @@ var self = module.exports = {
 			currentTimeout = setTimeout(() => {
 				if (!sentRes) {
 					sentRes = true;
-					return res.ok({
-						err: dataToSend
-					});
+					return self.sendMessage(dataToSend, res);
 				}
 			}, 500)
 		});
@@ -95,6 +100,18 @@ var self = module.exports = {
 		swiftProcess = spawn('swift');
 		res.ok();
 
+	},
+
+	/*
+		Private
+	*/
+
+	sendMessage: function(msg, res) {
+		res.ok({
+	    message: msg,
+	    notify: false,
+	    message_format: 'text'
+	  });
 	}
 
 };
